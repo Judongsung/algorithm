@@ -51,7 +51,7 @@ def run_air_cleaner(rlen, clen, board, ac_loc):
     return temp
 
 def solution(rlen, clen, t, board):
-    for i in range(rlen):
+    for i in range(2, rlen-2):
         if board[i][0] == -1:
             air_cleaner_loc = i
             break
