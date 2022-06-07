@@ -1,9 +1,12 @@
+from collections import deque
+
 def solution(a, b):
-    queue = [(a, 0)]
+    queue = deque()
+    queue.append((a, 0))
     result = -1
     
     while queue:
-        num, count = queue.pop(0)
+        num, count = queue.popleft()
         if num == b:
             result = count+1
             break
