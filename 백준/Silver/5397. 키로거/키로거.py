@@ -9,7 +9,7 @@ class Node:
         self.ch = ch
         
 def solution(s):
-    result = []
+    result = ''
     head = Node('')
     tail = Node('')
     head.next = tail
@@ -39,9 +39,9 @@ def solution(s):
     cur = head
     while cur.next != tail:
         cur = cur.next
-        result.append(cur.ch)
+        result += cur.ch
     
-    return ''.join(result)
+    return result
 
 n = int(stdin.readline())
 for _ in range(n):
