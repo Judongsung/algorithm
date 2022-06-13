@@ -1,3 +1,5 @@
+from sys import stdin
+
 def dfs(n, k, remain_cards, num_str=''):
     global num_set
     if k == 0:
@@ -9,8 +11,8 @@ def dfs(n, k, remain_cards, num_str=''):
     return
             
 num_set = set()
-n = int(input())
-k = int(input())
-cards = [input() for _ in range(n)]
+n = int(stdin.readline())
+k = int(stdin.readline())
+cards = [stdin.readline().rstrip() for _ in range(n)]
 dfs(n, k, cards)
 print(len(num_set))
