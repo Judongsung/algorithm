@@ -4,6 +4,7 @@ def dfs(n, k, remain_cards, num_str=''):
     global num_set
     if k == 0:
         num_set.add(num_str)
+        return
     for i, card in enumerate(remain_cards):
         next_remains = remain_cards.copy()
         del next_remains[i]
