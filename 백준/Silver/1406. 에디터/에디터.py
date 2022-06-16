@@ -45,7 +45,7 @@ class LinkedList:
         return
     
     def get_all_data(self, ):
-        result = []
+        result = ''
         node = self.head
         while node.right != self.tail:
             node = node.right
@@ -74,4 +74,4 @@ for _ in range(m):
     elif query[0] == 'P':
         ll.add(query[1])
 result = ll.get_all_data()
-print(''.join(result))
+print(result)
