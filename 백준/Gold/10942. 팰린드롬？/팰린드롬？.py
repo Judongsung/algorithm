@@ -1,30 +1,24 @@
-import sys
+from sys import stdin
+from sys import setrecursionlimit
 
-stdin = sys.stdin
-sys.setrecursionlimit(2**20)
-
-palindrome_map = {}
+setrecursionlimit(10**5)
 
 def is_palindrome(nums, left, right):
-    pair = (left, right)
-    if pair in palindrome_map:
-        return palindrome_map[pair]
+    if palindrome_map[left][right] != -1:
+        return palindrome_map[left][right]
     elif left >= right:
-        return 1
+        palindrome_map[left][right] = 1
     elif nums[left] != nums[right]:
-        palindrome_map[pair] = 0
+        palindrome_map[left][right] = 0
     else:
-        palindrome_map[pair] = is_palindrome(nums, left+1, right-1)
-    return palindrome_map[pair]
-
-def solution(n, nums, m, mlist):
-    for left, right in mlist:
-        answer = is_palindrome(nums, left-1, right-1)
-        print(answer)
-    return
+        palindrome_map[left][right] = is_palindrome(nums, left+1, right-1)
+    return palindrome_map[left][right]
 
 n = int(stdin.readline())
-nums = stdin.readline().split()
+nums = list(map(int, stdin.readline().split()))
+palindrome_map = [[-1 for __ in range(n)] for _ in range(n)]
 m = int(stdin.readline())
-mlist = [list(map(int, stdin.readline().split())) for _ in range(m)]
-solution(n, nums, m, mlist)
+for _ in range(m):
+    left, right = map(int, stdin.readline().split())
+    answer = is_palindrome(nums, left-1, right-1)
+    print(answer)
