@@ -1,5 +1,4 @@
 from sys import stdin
-from collections import deque
 
 EMPTY = '0'
 WALL = '1'
@@ -9,26 +8,22 @@ RIGHT_DOWN = 2
 
 n = int(stdin.readline())
 board = [stdin.readline().split() for _ in range(n)]
-goal = n-1
-count = 0
-queue = deque()
-queue.append((0, 1, RIGHT))
+memo = [[[0]*3 for _ in range(n)] for __ in range(n)]
 
-while queue:
-    r, c, d = queue.pop()
-    if r == goal and c == goal:
-        count += 1
-        continue
-        
-    is_right_empty = c+1 < n and board[r][c+1] == EMPTY
-    is_down_empty = r+1 < n and board[r+1][c] == EMPTY
-    is_right_down_empty = r+1 < n and c+1 < n and board[r+1][c+1] == EMPTY
+memo[0][1][RIGHT] = 1
+for c in range(1, n):
+    if board[0][c] == WALL:
+        break
+    memo[0][c][RIGHT] = 1
     
-    if d != DOWN and is_right_empty:
-        queue.append((r, c+1, RIGHT))
-    if d != RIGHT and is_down_empty:
-        queue.append((r+1, c, DOWN))
-    if is_right_empty and is_down_empty and is_right_down_empty:
-        queue.append((r+1, c+1, RIGHT_DOWN))
+for r in range(1, n):
+    for c in range(1, n):
+        if board[r][c] == EMPTY:
+            memo[r][c][RIGHT] = memo[r][c-1][RIGHT]+memo[r][c-1][RIGHT_DOWN]
+            memo[r][c][DOWN] = memo[r-1][c][DOWN]+memo[r-1][c][RIGHT_DOWN]
+            
+            if board[r-1][c] == EMPTY and board[r][c-1] == EMPTY:
+                memo[r][c][RIGHT_DOWN] = memo[r-1][c-1][RIGHT]+memo[r-1][c-1][DOWN]+memo[r-1][c-1][RIGHT_DOWN]
 
-print(count)
+result = sum(memo[n-1][n-1])
+print(result)
