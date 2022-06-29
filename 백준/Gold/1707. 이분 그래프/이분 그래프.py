@@ -31,11 +31,10 @@ for _ in range(k):
         graph[u].append(v)
         graph[v].append(u)
     binary_map = [NOT_VISITED for __ in graph]
-    binary_map[0] = 0
     result = 'YES'
     
-    while NOT_VISITED in binary_map:
-        if not check_graph(graph, binary_map, binary_map.index(NOT_VISITED)):
+    for i in range(1, v+1):
+        if binary_map[i] == NOT_VISITED and not check_graph(graph, binary_map, i):
             result = 'NO'
             break
     print(result)
