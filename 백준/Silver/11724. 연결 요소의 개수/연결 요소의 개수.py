@@ -4,13 +4,12 @@ from sys import setrecursionlimit
 setrecursionlimit(10**6)
 
 def dfs(graph, node, not_visited):
-    if node not in not_visited:
-        return
-    
     not_visited.remove(node)
     children = graph[node]
     
     for child in children:
+        if child not in not_visited:
+            continue
         dfs(graph, child, not_visited)
         
     return
