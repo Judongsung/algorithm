@@ -7,15 +7,16 @@ dirs = [(-1, 0), (0, -1), (0, 1), (1, 0)]
 def find_max_path(r, c):
     if count_board[r][c] == -1:
         num = board[r][c]
-        count = 1
+        count = 0
         
         for r_dir, c_dir in dirs:
             next_r = r+r_dir
             next_c = c+c_dir
             if 0 <= next_r < n and 0 <= next_c < n and board[next_r][next_c] > num:
-                temp = 1+find_max_path(next_r, next_c)
-                count = max(count, temp)
-        count_board[r][c] = count
+                temp = find_max_path(next_r, next_c)
+                if temp > count:
+                    count = temp
+        count_board[r][c] = count+1
         
     return count_board[r][c]
 
@@ -27,5 +28,6 @@ result = 0
 for i in range(n):
     for j in range(n):
         temp = find_max_path(i, j)
-        result = max(result, temp)
+        if temp > result:
+            result = temp
 print(result)
