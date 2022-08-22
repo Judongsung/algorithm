@@ -25,15 +25,17 @@ for _ in range(n):
     queue = deque([(a, '')])
     visited = set([a])
     
-    while queue:
+    flag = True
+    while flag and queue:
         num, qlist = queue.popleft()
-        if num == b:
-            result = qlist
-            break
         
         for func, c in func_list:
             a = func(num)
-            if a not in visited:
+            if a == b:
+                result = qlist+c
+                flag = False
+                break
+            elif a not in visited:
                 queue.append((a, qlist+c))
                 visited.add(a)
     
