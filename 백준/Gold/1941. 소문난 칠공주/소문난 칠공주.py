@@ -4,16 +4,7 @@ SOM = 'S'
 YIM = 'Y'
 dirs = [(-1, 0), (0, -1), (0, 1), (1, 0)]
 
-def find_sp(r, c):
-    result = 0
-    s_count = 0
-    y_count = 0
-    loc_list = []
-    
-    result = dfs(r, c, loc_list)
-    return result
-
-def dfs(r, c, loc_list, s_count=0, y_count=0, prev_group_id=0):
+def dfs(r, c, loc_list=[], s_count=0, y_count=0, prev_group_id=0):
     group_id = get_group_id(r, c, prev_group_id)
     if not (0 <= r < 5 and 0 <= c < 5) or visited[r][c] or group_id in group_id_set:
         return 0
@@ -53,6 +44,6 @@ count = 0
 
 for r in range(5):
     for c in range(5):
-        count += find_sp(r, c)
+        count += dfs(r, c)
 
 print(count)
