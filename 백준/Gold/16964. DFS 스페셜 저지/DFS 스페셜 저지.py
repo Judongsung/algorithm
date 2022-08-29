@@ -1,13 +1,13 @@
 from sys import stdin
 
 n = int(stdin.readline())
-graph = [[] for _ in range(n+1)]
+graph = [set() for _ in range(n+1)]
 for _ in range(n-1):
     a, b = map(int, stdin.readline().split())
-    graph[a].append(b)
-    graph[b].append(a)
+    graph[a].add(b)
+    graph[b].add(a)
 visit_order = list(map(int, stdin.readline().split()))
-graph[0].append(1)
+graph[0].add(1)
 stack = []
 cur = 0
 
