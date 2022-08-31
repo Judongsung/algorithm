@@ -3,20 +3,20 @@ from sys import setrecursionlimit
 
 setrecursionlimit(10**6)
 
-def find_max_radius(cur, prev_length):
+def find_max_radius(cur):
     global max_radius
     max_length = 0
     second_max_length = 0
     
     for connect, weight in graph[cur]:
-        length = find_max_radius(connect, prev_length)+weight
+        length = find_max_radius(connect)+weight
         if length > max_length:
             second_max_length = max_length
             max_length = length
         elif length > second_max_length:
             second_max_length = length
             
-    radius = max_length+max(second_max_length, prev_length)
+    radius = max_length+second_max_length
     max_radius = max(max_radius, radius)
     return max_length
 
@@ -27,5 +27,5 @@ for _ in range(n-1):
     parent, child, weight = map(int, stdin.readline().split())
     graph[parent].append((child, weight))
     
-find_max_radius(1, 0)
+find_max_radius(1)
 print(max_radius)
