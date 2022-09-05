@@ -4,7 +4,6 @@ operlist = [lambda a,b:a+b, lambda a,b:a-b]
 n = int(stdin.readline())
 numlist = list(map(int, stdin.readline().split()))
 memo = [[0 for _ in range(21)] for _ in range(n-1)]
-count = 0
 memo[0][numlist[0]] = 1
 
 for i in range(n-2):
