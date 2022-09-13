@@ -18,9 +18,13 @@ def solution(n, s, a, b, fares):
     for mid in range(n):
         for start in range(n):
             for end in range(n):
-                matrix[start][end] = min(matrix[start][end], matrix[start][mid]+matrix[mid][end])
+                fare = matrix[start][mid]+matrix[mid][end]
+                if fare < matrix[start][end]:
+                    matrix[start][end] = fare
     
     for mid in range(n):
         fare = matrix[s][mid]+matrix[mid][a]+matrix[mid][b]
-        min_fare = min(min_fare, fare)
+        if fare < min_fare:
+            min_fare = fare
+        
     return min_fare
