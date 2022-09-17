@@ -1,16 +1,20 @@
 from sys import stdin
 from collections import deque
 
+INF = 10**8
+
 t = int(stdin.readline())
 for _ in range(t):
     n, d, c = map(int, stdin.readline().split())
+    c -= 1
     dependency = [[] for _ in range(n)]
-    times = [10**8 for _ in range(n)]
-    times[c-1] = 0
+    times = [INF for _ in range(n)]
+    times[c] = 0
     for _ in range(d):
         a, b, s = map(int, stdin.readline().split())
         dependency[b-1].append((a-1, s))
-    queue = deque([(c-1, 0)])
+    queue = deque([(c, 0)])
+    max_time = 0
     com_count = 0
     
     while queue:
@@ -22,5 +26,9 @@ for _ in range(t):
                 times[depend] = next_time
                 queue.append((depend, next_time))
             
-    connected = [time for time in times if time < 10**8]
-    print(len(connected), max(connected))
+    for time in times:
+        if time != INF:
+            com_count += 1
+            if time > max_time:
+                max_time = time
+    print(com_count, max_time)
