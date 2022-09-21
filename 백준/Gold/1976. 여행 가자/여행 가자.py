@@ -1,25 +1,33 @@
 from sys import stdin
 
+def union(one, other):
+    if one > other:
+        one, other = other, one
+    parents[find(other)] = find(one)
+    return
+
+def find(child):
+    if parents[child] != child:
+        parents[child] = find(parents[child])
+    return parents[child]
+
 n = int(stdin.readline())
 m = int(stdin.readline())
-matrix = [list(map(int, stdin.readline().split())) for _ in range(n)]
+parents = [i for i in range(n)]
 for i in range(n):
-    matrix[i][i] = 1
-plan = list(map(int, stdin.readline().split()))
+    paths = list(map(int, stdin.readline().split()))
+    for j, is_connect in enumerate(paths):
+        if is_connect:
+            union(i, j)
+plan = list(map(lambda x:int(x)-1, stdin.readline().split()))
 result = 'YES'
 
-for mid in range(n):
-    for start in range(n):
-        for end in range(n):
-            if matrix[start][mid] and matrix[mid][end]:
-                matrix[start][end] = 1
-                
-cur = plan[0]-1
+prev = find(plan[0])
 for city in plan[1:]:
-    city -= 1
-    if not matrix[cur][city]:
+    cur = find(city)
+    if prev != cur:
         result = 'NO'
         break
-    cur = city
+    prev = cur
     
 print(result)
