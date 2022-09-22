@@ -7,24 +7,27 @@ TOGGLE = 'toggle'
 ALL = 'all'
 EMPTY = 'empty'
 
-s = 0
-all_set = 2**20-1
+s = set()
+all_set = set([str(i) for i in range(1, 21)])
 m = int(stdin.readline())
-
 for _ in range(m):
     query = stdin.readline().split()
-    if len(query) == 2:
-        num = 1<<int(query[1])-1
     if query[0] == ADD:
-        s |= num
+        s.add(query[1])
     elif query[0] == REMOVE:
-        s &= ~num
+        if query[1] in s:
+            s.remove(query[1])
     elif query[0] == CHECK:
-        output = 1 if s&num else 0
+        output = 0
+        if query[1] in s:
+            output = 1
         print(output)
     elif query[0] == TOGGLE:
-        s ^= num
+        if query[1] in s:
+            s.remove(query[1])
+        else:
+            s.add(query[1])
     elif query[0] == ALL:
-        s = all_set
+        s = all_set.copy()
     elif query[0] == EMPTY:
-        s = 0
+        s = set()
