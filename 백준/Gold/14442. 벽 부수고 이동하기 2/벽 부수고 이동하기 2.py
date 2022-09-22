@@ -6,7 +6,6 @@ WALL = '1'
 DIRS = [(1, 0), (0, 1), (0, -1), (-1, 0)]
 
 def find_min_distance():
-    global visited
     goal = (n-1, m-1)
     queue = deque([(0, 0, k, 0)])
     visited = [[-1 for __ in range(m)] for _ in range(n)]
@@ -25,7 +24,7 @@ def find_min_distance():
                 if board[next_r][next_c] == EMPTY and breakable > visited[next_r][next_c]:
                     queue.append((next_r, next_c, breakable, distance+1))
                     visited[next_r][next_c] = breakable
-                elif breakable and breakable-1 > visited[next_r][next_c]:
+                elif breakable-1 > visited[next_r][next_c]:
                     queue.append((next_r, next_c, breakable-1, distance+1))
                     visited[next_r][next_c] = breakable-1
     else:
