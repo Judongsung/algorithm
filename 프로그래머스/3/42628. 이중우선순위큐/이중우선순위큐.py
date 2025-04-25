@@ -1,4 +1,5 @@
 import heapq
+from collections import Counter
 
 INSERT = "I"
 DELETE = "D"
@@ -9,6 +10,7 @@ def solution(operations):
     answer = [0, 0]
     max_heap = []
     min_heap = []
+    counter = Counter()
     
     for op in operations:
         op1, op2 = op.split()
@@ -17,19 +19,32 @@ def solution(operations):
             num = int(op2)
             heapq.heappush(max_heap, -num)
             heapq.heappush(min_heap, num)
+            counter[num] += 1
         elif op1 == DELETE:
-            if not max_heap:
-                continue
-                
             if op2 == MAXNUM:
-                num = heapq.heappop(max_heap)
-                min_heap.remove(-num)
-            elif op2 == MINNUM:
-                num = heapq.heappop(min_heap)
-                max_heap.remove(-num)
+                while max_heap and counter[-max_heap[0]] == 0:
+                    heapq.heappop(max_heap)
+
+                if max_heap:
+                    num = -heapq.heappop(max_heap)
+                    counter[num] -= 1
                 
+            elif op2 == MINNUM:
+                while min_heap and counter[min_heap[0]] == 0:
+                    heapq.heappop(min_heap)
+
+                if min_heap:
+                    num = heapq.heappop(min_heap)
+                    counter[num] -= 1
+    
+    while max_heap and counter[-max_heap[0]] == 0:
+        heapq.heappop(max_heap)
+        
+    while min_heap and counter[min_heap[0]] == 0:
+        heapq.heappop(min_heap)
+    
     if max_heap:
-        answer[0] = -heapq.heappop(max_heap)
-        answer[1] = heapq.heappop(min_heap)
+        answer[0] = -max_heap[0]
+        answer[1] = min_heap[0]
     
     return answer
