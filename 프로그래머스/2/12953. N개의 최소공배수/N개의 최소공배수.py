@@ -8,9 +8,8 @@ def solution(arr):
     
     for i in range(2, len(sieve)):
         if sieve[i]:
-            for j in range(i+1, len(sieve)):
-                if sieve[j] and j%i == 0:
-                    sieve[j] = False
+            for j in range(i*2, len(sieve), i):
+                sieve[j] = False
             
     primes = [i for i, is_prime in enumerate(sieve) if is_prime]
     
@@ -19,7 +18,7 @@ def solution(arr):
             prime_count = 0
             while num%prime == 0:
                 prime_count += 1
-                num /= prime
+                num //= prime
             if lcm_counter[prime] < prime_count:
                 lcm_counter[prime] = prime_count
     
