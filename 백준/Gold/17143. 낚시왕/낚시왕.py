@@ -18,25 +18,31 @@ class Shark:
         if self.direction in (DIRS[1], DIRS[2]):
             cycle = 2*(rlen-1)
             move_steps = self.speed%cycle
-            
-            for _ in range(move_steps):
-                next_r = self.row+self.direction[ROW]
+            next_r = self.row+(move_steps*self.direction[ROW])
 
-                if next_r < 1 or next_r > rlen:
+            while next_r < 1 or next_r > rlen:
+                if next_r < 1:
+                    next_r = 2-next_r
                     self.reverse_direction()
-                
-                self.row += self.direction[ROW]
+                elif next_r > rlen:
+                    next_r = rlen*2-next_r
+                    self.reverse_direction()
+
+            self.row = next_r
         else:
             cycle = 2*(clen-1)
             move_steps = self.speed%cycle
-            
-            for _ in range(move_steps):
-                next_c = self.col+self.direction[COL]
+            next_c = self.col+(move_steps*self.direction[COL])
 
-                if next_c < 1 or next_c > clen:
+            while next_c < 1 or next_c > clen:
+                if next_c < 1:
+                    next_c = 2-next_c
                     self.reverse_direction()
-                
-                self.col += self.direction[COL]
+                elif next_c > clen:
+                    next_c = clen*2-next_c
+                    self.reverse_direction()
+            
+            self.col = next_c
 
         return self.row, self.col
 
