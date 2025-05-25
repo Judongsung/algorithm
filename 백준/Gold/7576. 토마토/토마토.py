@@ -1,13 +1,14 @@
+from sys import stdin
 from collections import deque
 
 RIPENED = 1
 UNRIPENED = 0
 NOT_EXIST = -1
 
-m, n = map(int, input().split())
+m, n = map(int, stdin.readline().rstrip().split())
 matrix = []
 for _ in range(n):
-    line = list(map(int, input().split()))
+    line = list(map(int, stdin.readline().rstrip().split()))
     matrix.append(line)
 
 def get_total_ripening_days(rlen:int, clen:int, matrix:list[list[int]]) -> int:
