@@ -6,6 +6,13 @@ ROW = 0
 COL = 1
 DIRS = [None, [-1, 0], [1, 0], [0, 1], [0, -1]]
 
+from typing import List, Tuple
+from copy import deepcopy
+
+ROW = 0
+COL = 1
+DIRS = [None, [-1, 0], [1, 0], [0, 1], [0, -1]]
+
 class Shark:
     def __init__(self, row:int, col:int, speed:int, direction:int, size:int):
         self.row = row
@@ -67,32 +74,43 @@ class Shark:
         return self.size > other.size
 
 class FishingSimulator:
-    def __init__(self, rlen:int, clen:int, sharks:Shark):
+    def __init__(self, rlen:int, clen:int, sharks:List[Shark]):
         self.rlen = rlen
         self.clen = clen
         self.sharks = sorted(sharks, reverse=True)
         self.catched_size = 0
-    
+        self.matrix = [[None for __ in range(clen+1)] for _ in range(rlen+1)]
+
+        for shark in sharks:
+            r, c = shark.get_location()
+            self.matrix[r][c] = shark
+            
     def simulate(self, ) -> None:
-        for cur_c in range(1, self.clen+1):
-            same_col_sharks = list()
-            living_sharks = dict()
+        for c in range(1, self.clen+1):
+            next_matrix = [[None for __ in range(self.clen+1)] for _ in range(self.rlen+1)]
 
-            for i, shark in enumerate(self.sharks):
-                location = shark.get_location()
-                if location[COL] == cur_c:
-                    same_col_sharks.append((i, shark))
+            for r in range(1, self.rlen+1):
+                if isinstance(self.matrix[r][c], Shark):
+                    self.catched_size += self.matrix[r][c].get_size()
+                    self.sharks.remove(self.matrix[r][c])
+                    self.matrix[r][c] = None
+                    break
 
-            if same_col_sharks:
-                fished = min(same_col_sharks, key=lambda x:x[1].get_location()[ROW])
-                self.catched_size += self.sharks.pop(fished[0]).get_size()
+            shark_idx = 0
+            while shark_idx < len(self.sharks):
+                shark = self.sharks[shark_idx]
+                sr, sc = shark.get_location()
+                next_sr, next_sc = shark.move(self.rlen, self.clen)
+                
+                if not next_matrix[next_sr][next_sc]:
+                    next_matrix[next_sr][next_sc] = shark
+                elif isinstance(next_matrix[next_sr][next_sc], Shark):
+                    self.sharks.pop(shark_idx)
+                    continue
 
-            for shark in self.sharks:
-                location = shark.move(self.rlen, self.clen)
-                if not shark.is_eaten(living_sharks):
-                    living_sharks[location] = shark    
+                shark_idx += 1
 
-            self.sharks = list(living_sharks.values())
+            self.matrix = next_matrix
 
     def get_catched_size(self, ) -> int:
         return self.catched_size
