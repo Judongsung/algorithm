@@ -70,7 +70,7 @@ class FishingSimulator:
     def __init__(self, rlen:int, clen:int, sharks:Shark):
         self.rlen = rlen
         self.clen = clen
-        self.sharks = sorted([deepcopy(shark) for shark in sharks], reverse=True)
+        self.sharks = sorted(sharks, reverse=True)
         self.catched_size = 0
     
     def simulate(self, ) -> None:
