@@ -1,40 +1,52 @@
-from sys import stdin
+from sys import stdin, setrecursionlimit
+from typing import List
 
-total_max_distance = 0
 
-def solution(v, node_infos):
-    tree = create_tree(v, node_infos)
-    dfs(tree, 1, None)
-    return total_max_distance
+setrecursionlimit(10**6)
 
-def create_tree(v, node_infos):
-    tree = [[] for _ in range(v+1)]
-    for ninfo in node_infos:
-        node = ninfo[0]
-        cursor = 1
-        while ninfo[cursor] != -1:
-            other = ninfo[cursor]
-            distance = ninfo[cursor+1]
-            tree[node].append((other, distance))
-            cursor += 2
-    return tree
+def update_ranking(new:int, ranking:List[int]):
+    # 이진탐색으로 O(n) -> O(logn) 최적화 가능할듯
+    for i, score in enumerate(ranking):
+        if new > score:
+            ranking.insert(i, new)
+            ranking.pop()
+            return
 
-def dfs(tree, cur, parent):
-    global total_max_distance
-    cur_max_distance = 0
+def find_max_distance(nodes:List[int]) -> int:
+    visited = [False for _ in nodes]
+    root = 1
+    max_distance = 0
     
-    for conn, dist in tree[cur]:
-        if conn == parent:
-            continue
-        temp = dfs(tree, conn, cur)+dist
-        if temp+cur_max_distance > total_max_distance:
-            total_max_distance = temp+cur_max_distance
-        if temp > cur_max_distance:
-            cur_max_distance = temp
-        
-    return cur_max_distance
+    def dfs(cur:int):
+        nonlocal nodes, visited, max_distance
+        distance_ranking = [0 for _ in range(2)]
+        visited[cur] = True
 
-v = int(stdin.readline())
-node_infos = [list(map(int, stdin.readline().split())) for _ in range(v)]
-result = solution(v, node_infos)
+        for num, dist in nodes[cur].items():
+            if visited[num]:
+                continue
+            linked_distance = dist+dfs(num)
+            update_ranking(linked_distance, distance_ranking)
+
+        max_distance = max(sum(distance_ranking), max_distance)
+
+        return distance_ranking[0]
+
+    dfs(root)
+
+    return max_distance
+
+v = int(stdin.readline().rstrip())
+nodes = [dict() for _ in range(v+1)]
+for _ in range(v):
+    data = list(map(int, stdin.readline().rstrip().split()))
+    num = data[0]
+    link_info = data[1:-1]
+    
+    for i in range(0, len(link_info), 2):
+        linked = link_info[i]
+        dist = link_info[i+1]
+        nodes[num][linked] = dist
+        
+result = find_max_distance(nodes)
 print(result)
