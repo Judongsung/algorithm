@@ -4,6 +4,7 @@ from sys import stdin
 
 def catch_max_fruits(n: int, fruit_drops: List[int], move: int) -> int:
     now = [0 for _ in range(move+1)]
+    prev = [0 for _ in range(move+1)]
     
     for i in range(n):
         drop_pos = [0, 0]
@@ -11,8 +12,9 @@ def catch_max_fruits(n: int, fruit_drops: List[int], move: int) -> int:
             drop_pos[0] = 1
         else:
             drop_pos[1] = 1
-        prev = now
-        now = [0 for _ in range(move+1)]
+        prev, now = now, prev
+        for i in range(move+1):
+            now[i] = 0
         now[0] = prev[0]+drop_pos[0]
         for j in range(1, move+1):
             now[j] = max(prev[j-1]+drop_pos[j%2], prev[j]+drop_pos[j%2])
