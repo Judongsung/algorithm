@@ -30,9 +30,8 @@ def has_key(key: str, inventory: int) -> int:
     return inventory & (1 << idx)
 
 def find_route(rlen: int, clen: int, board: List[str], prev_r: int, prev_c: int, inventory=0) -> int:
-    min_route = float('inf')
     queue = deque()
-    visited = [[[False for __ in range(1 << (DOOR_KINDS+1))] for _ in row] for row in board]
+    visited = [[[False for __ in range(1 << (DOOR_KINDS))] for _ in row] for row in board]
     
     queue.append((prev_r, prev_c, 0, 0))
     visited[prev_r][prev_c][0] = True
@@ -53,9 +52,9 @@ def find_route(rlen: int, clen: int, board: List[str], prev_r: int, prev_c: int,
                     continue
                 if place == GOAL:
                     return next_move
-                elif place in KEYS and not has_key(place, inventory):
+                elif place in KEYS and not has_key(place, inven):
                     next_inven = pick_key(place, inven)
-                    visited[next_r][next_c][next_inven]
+                    visited[next_r][next_c][next_inven] = True
                 queue.append((next_r, next_c, next_move, next_inven))
 
     return IMPOSSIBLE
@@ -75,6 +74,4 @@ for r in range(rlen):
             break
     
 result = find_route(rlen, clen, board, start_r, start_c)
-if result == float('inf'):
-    result = IMPOSSIBLE
 print(result)
