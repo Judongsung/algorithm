@@ -25,10 +25,6 @@ def pick_key(key: str, inventory: int) -> int:
     idx = ord(key)-ASCII_LOWER_A
     return inventory | (1 << idx)
 
-def has_key(key: str, inventory: int) -> int:
-    idx = ord(key)-ASCII_LOWER_A
-    return inventory & (1 << idx)
-
 def find_route(rlen: int, clen: int, board: List[str], prev_r: int, prev_c: int, inventory=0) -> int:
     queue = deque()
     visited = [[[False for __ in range(1 << (DOOR_KINDS))] for _ in row] for row in board]
@@ -42,20 +38,16 @@ def find_route(rlen: int, clen: int, board: List[str], prev_r: int, prev_c: int,
         for r_dir, c_dir in DIRS:
             next_r = r+r_dir
             next_c = c+c_dir
-            if 0 <= next_r < rlen and 0 <= next_c < clen and\
-                    not visited[next_r][next_c][inven] and board[next_r][next_c] != WALL:
-                visited[next_r][next_c][inven] = True
+            if 0 <= next_r < rlen and 0 <= next_c < clen:
                 place = board[next_r][next_c]
-                next_move = move+1
-                next_inven = inven
-                if place in DOORS and not is_passable(place, inven):
+                next_inven = pick_key(place, inven) if place in KEYS else inven
+                if place == WALL or visited[next_r][next_c][next_inven] or\
+                        (place in DOORS and not is_passable(place, inven)):
                     continue
                 if place == GOAL:
-                    return next_move
-                elif place in KEYS and not has_key(place, inven):
-                    next_inven = pick_key(place, inven)
-                    visited[next_r][next_c][next_inven] = True
-                queue.append((next_r, next_c, next_move, next_inven))
+                    return move+1
+                visited[next_r][next_c][next_inven] = True
+                queue.append((next_r, next_c, move+1, next_inven))
 
     return IMPOSSIBLE
 
