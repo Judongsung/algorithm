@@ -1,13 +1,13 @@
+from __future__ import annotations
 from sys import stdin
-from typing import Dict
 from collections import deque
 
 
 START = 1
 GOAL = 100
-DICE = tuple(n for n in range(6, 0, -1))
+DICE = range(1, 7)
 
-def find_min_roll(ladders: Dict[int, int], snakes: Dict[int, int]) -> int:
+def find_min_roll(ladders: dict[int, int], snakes: dict[int, int]) -> int:
     goal = GOAL
     visited = [False for _ in range(GOAL+1)] # visited[0]은 더미데이터
     queue = deque()
@@ -18,22 +18,17 @@ def find_min_roll(ladders: Dict[int, int], snakes: Dict[int, int]) -> int:
         pos, roll = queue.popleft()
         next_roll = roll+1
 
-        max_moved = False # 사다리나 뱀이 없이 이동할 수 있는 최대 칸을 이동한 경우
         for n in DICE:
             next_pos = pos+n
-            if next_pos >= 100:
+            if next_pos == GOAL:
                 return next_roll
-            if visited[next_pos]:
+            if next_pos > GOAL or visited[next_pos]:
                 continue
 
             if next_pos in ladders:
                 next_pos = ladders[next_pos]
             elif next_pos in snakes:
                 next_pos = snakes[next_pos]
-            elif not max_moved:
-                max_moved = True
-            else:
-                continue
             visited[next_pos] = True
             queue.append((next_pos, next_roll))
 
