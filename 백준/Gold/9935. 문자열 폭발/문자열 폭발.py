@@ -9,12 +9,10 @@ def explode_text(text: str, bomb: str) -> str:
     bomb_to_list = list(bomb)
     bomb_len = len(bomb)
 
-    while cur < len(text):
-        stack.append(text[cur])
-        cur += 1
+    for ch in text:
+        stack.append(ch)
         while len(stack) >= bomb_len and stack[-bomb_len:] == bomb_to_list:
-            for _ in range(bomb_len):
-                stack.pop()
+            del stack[-bomb_len:]
 
     if not stack:
         return EMPTY
