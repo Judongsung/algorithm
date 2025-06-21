@@ -6,11 +6,11 @@ from sys import stdin
 def find_few_duplicate(seq: list[int], threshold: int) -> int:
     max_len = 0
     left = 0
-    counter = Counter()
+    counter = [0]*100001
 
     for right, rval in enumerate(seq):
         counter[rval] += 1
-        while counter[seq[right]] > threshold:
+        while counter[rval] > threshold:
             counter[seq[left]] -= 1
             left += 1
         max_len = max(right-left+1, max_len)
