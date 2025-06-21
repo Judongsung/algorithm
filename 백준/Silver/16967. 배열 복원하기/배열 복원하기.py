@@ -1,11 +1,11 @@
 from sys import stdin
 
 
-def restore_array(height: int, weight: int, x: int, y: int, array: list) -> list:
-    restored = [[array[h][w] for w in range(weight)] for h in range(height)]
+def restore_array(height: int, width: int, x: int, y: int, array: list) -> list:
+    restored = [[array[h][w] for w in range(width)] for h in range(height)]
     
     for h in range(x, height):
-        for w in range(y, weight):
+        for w in range(y, width):
             restored[h][w] -= restored[h-x][w-y]
 
     return restored
