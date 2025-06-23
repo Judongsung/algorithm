@@ -23,8 +23,8 @@ def count_hightouch(left: list, right: list) -> int:
     for ch in right:
         if ch == ')':
             r_stack += 1
-            r_front = max(r_stack, r_front)
-            if r_stack == r_front:
+            if r_stack >= r_front:
+                r_front = r_stack
                 count += l_counter[r_stack]
         else:
             r_stack -= 1
