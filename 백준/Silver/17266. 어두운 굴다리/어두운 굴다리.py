@@ -5,12 +5,12 @@ def find_min_height(n: int, positions: list) -> int:
     if len(positions) == 1:
         return max(positions[0], n-positions[0])
 
-    distances = [positions[0], n-positions[-1]]
+    min_height = max(positions[0], n-positions[-1])
     for i, left in enumerate(positions[:-1]):
         right = positions[i+1]
-        distances.append(ceil((right-left)/2))
+        min_height = max(ceil((right-left)/2), min_height)
     
-    return max(distances)
+    return min_height
 
 n = int(stdin.readline())
 m = int(stdin.readline())
