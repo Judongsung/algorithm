@@ -9,7 +9,7 @@ def assign_budget(total_budget: int, demands: list) -> int:
         
     max_threshold = 0
     left = 0
-    right = total_budget
+    right = max(demands)
     
     while left < right:
         cur = (left+right)//2
