@@ -1,21 +1,15 @@
 from sys import stdin
-from heapq import heapify, heappop
 
 
 def figure_out_area(pillars: list) -> int:
     area = 0
-    heap = [(-height, pos) for pos, height in pillars]
-    heapify(heap)
+    sorted_pillars = sorted(pillars, key=lambda x:x[1], reverse=True)
     
-    height, pos = heappop(heap)
-    height = -height
+    pos, height = sorted_pillars[0]
     area += height
     checked_left, checked_right = pos, pos
-    
-    while heap:
-        height, pos = heappop(heap)
-        height = -height
-        
+
+    for pos, height in sorted_pillars[1:]:
         if pos < checked_left:
             area += (checked_left-pos)*height
             checked_left = pos
@@ -24,7 +18,6 @@ def figure_out_area(pillars: list) -> int:
             checked_right = pos
 
     return area
-        
 
 n = int(stdin.readline().rstrip())
 pillars = []
