@@ -2,22 +2,23 @@ from sys import stdin
 from heapq import heappush, heappop
 
 
-def find_min_cost(nodes: list, start: int, target: int) -> int:
-    min_cost = [float('inf')]*len(nodes)
-    visited = [False]*len(nodes)
+def find_min_cost(graph: list, start: int, target: int) -> int:
+    min_cost = [float('inf')]*len(graph)
+    visited = [False]*len(graph)
     min_cost[start] = 0
     remain_nodes = [(0, start)]
 
-    while not all(visited):
-        while visited[remain_nodes[0][1]]:
-            heappop(remain_nodes)
-        _, cur = heappop(remain_nodes)
-        for connected, cost in nodes[cur]:
-            move_cost = min_cost[cur]+cost
+    while remain_nodes:
+        dist, cur = heappop(remain_nodes)
+        if cur == target:
+            return dist
+        if dist < min_cost[cur]:
+            continue
+        for connected, cost in graph[cur]:
+            move_cost = dist+cost
             if move_cost < min_cost[connected]:
                 min_cost[connected] = move_cost
                 heappush(remain_nodes, (move_cost, connected))
-        visited[cur] = True
     
     return min_cost[target]
 
