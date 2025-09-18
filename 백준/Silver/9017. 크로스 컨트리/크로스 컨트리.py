@@ -34,7 +34,7 @@ def find_winner(data: list) -> int:
         team_info.checked += 1
         cur_point += 1
 
-    return sorted(team_infos, key=lambda x:team_infos[x])[0]
+    return min(team_infos, key=lambda x:team_infos[x])
 
 t = int(stdin.readline())
 for _ in range(t):
