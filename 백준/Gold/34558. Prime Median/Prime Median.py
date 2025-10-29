@@ -1,21 +1,22 @@
-from math import sqrt
+from math import isqrt
 from bisect import bisect, bisect_left
 from sys import stdin
 
 
 def find_primes(maxnum: int) -> list[int]:
+    sieve = [True] * (maxnum + 1)
+    sieve[0] = sieve[1] = False
+
+    for p in range(2, isqrt(maxnum) + 1):
+        if sieve[p]:
+            for i in range(p * p, maxnum + 1, p):
+                sieve[i] = False
+
     primes = []
-
-    def is_prime(num: int) -> bool:
-        for i in range(2, int(sqrt(num))+1):
-            if num%i == 0:
-                return False
-        return True
-    
-    for i in range(2, maxnum+1):
-        if is_prime(i):
+    for i in range(2, maxnum + 1):
+        if sieve[i]:
             primes.append(i)
-
+            
     return primes
 
 def find_mid_num(lst: list, left_num: int, right_num: int) -> int:
