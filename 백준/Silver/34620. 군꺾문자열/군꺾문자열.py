@@ -1,5 +1,4 @@
 from sys import stdin
-from collections import deque
 
 
 ADD_ONE= 'G'
