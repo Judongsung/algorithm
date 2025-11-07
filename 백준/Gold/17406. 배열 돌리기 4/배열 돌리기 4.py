@@ -1,12 +1,11 @@
 from sys import stdin
-from copy import deepcopy
 from itertools import permutations
 
 
 class Matrix:
     def __init__(self, matrix: list[list[int]]):
-        self.raw_matrix = deepcopy(matrix)
-        self.matrix = deepcopy(matrix)
+        self.raw_matrix = [row[:] for row in matrix]
+        self.matrix = [row[:] for row in matrix]
 
     def rotate(self, r: int, c: int, s: int):
         matrix = self.matrix
@@ -41,7 +40,7 @@ class Matrix:
         return min_sum
 
     def reset(self, ):
-        self.matrix = deepcopy(self.raw_matrix)
+        self.matrix = [row[:] for row in self.raw_matrix]
     
         
 n, m, k = map(int, stdin.readline().rstrip().split())
