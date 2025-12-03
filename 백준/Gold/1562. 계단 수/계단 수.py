@@ -10,7 +10,7 @@ def solution(n: int) -> int:
 
     for i in range(n-1):
         for mn in range(10): # min
-            for mx in range(10): # max
+            for mx in range(mn, 10): # max
                 for cur in range(10):
                     if memo[i][mn][mx][cur] == 0:
                         continue
