@@ -1,14 +1,20 @@
+using System.Collections;
+
 using var reader = new StreamReader(Console.OpenStandardInput());
 using var writer = new StreamWriter(Console.OpenStandardOutput());
 
 int n = int.Parse(reader.ReadLine());
-LinkedList<int> deque = new LinkedList<int>(Enumerable.Range(1, n));
+Queue<int> queue = new Queue<int>(n);
 
-while(deque.Count > 1)
+for(int i=1;i<=n;i++)
 {
-    deque.RemoveFirst();
-    deque.AddLast(deque.First.Value);
-    deque.RemoveFirst();
+    queue.Enqueue(i);
 }
 
-writer.WriteLine(deque.First.Value.ToString());
+while(queue.Count > 1)
+{
+    queue.Dequeue();
+    queue.Enqueue(queue.Dequeue());
+}
+
+writer.WriteLine(queue.Peek());
