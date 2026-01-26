@@ -42,10 +42,10 @@ int BFS(int sr, int sc)
 {
     int maxDist = 0;
     Queue<(int r, int c, int d)> queue = new Queue<(int r, int c, int d)>();
-    HashSet<(int r, int c)> visited = new HashSet<(int r, int c)>();
+    bool[,] visited = new bool[rLen, cLen];
 
     queue.Enqueue((sr, sc, 0));
-    visited.Add((sr, sc));
+    visited[sr, sc] = true;
 
     while (queue.Count > 0)
     {
@@ -58,10 +58,10 @@ int BFS(int sr, int sc)
             int nr = cur.r+dir.dr;
             int nc = cur.c+dir.dc;
 
-            if (nr < 0 || nr >= rLen || nc < 0 || nc >= cLen || visited.Contains((nr, nc)) || board[nr, nc] == WALL) continue;
+            if (nr < 0 || nr >= rLen || nc < 0 || nc >= cLen || visited[nr, nc] || board[nr, nc] == WALL) continue;
 
             queue.Enqueue((nr, nc, cur.d+1));
-            visited.Add((nr, nc));
+            visited[nr, nc] = true;
         }
     }
 
