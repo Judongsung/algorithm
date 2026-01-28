@@ -4,13 +4,14 @@ using var writer = new StreamWriter(Console.OpenStandardOutput());
 const int MOD = 9901;
 
 int n = int.Parse(reader.ReadLine());
-int[] prev = null;
 int[] cur = {1, 1, 1};
+int[] prev = new int[3];
 
 for (int i=1;i<n;i++)
 {
-    prev = cur;
-    cur = new int[3];
+    int[] temp = cur;
+    cur = prev;
+    prev = temp;
 
     cur[0] = (prev[0] + prev[1] + prev[2])%MOD;
     cur[1] = (prev[0] + prev[2])%MOD;
