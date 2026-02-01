@@ -1,0 +1,113 @@
+using var reader = new StreamReader(Console.OpenStandardInput());
+using var writer = new StreamWriter(Console.OpenStandardOutput());
+
+int n = int.Parse(reader.ReadLine());
+Node[] graph = new Node[n+1];
+
+for (int i=1;i<=n;i++)
+{
+    graph[i] = new Node();
+}
+
+for (int i=1;i<=n;i++)
+{
+    int[] input = Array.ConvertAll(reader.ReadLine().Split(), int.Parse);
+
+    for (int j=0;j<input.Length-1;j++)
+    {
+        graph[i].Connect(graph[input[j]]);
+    }
+}
+
+int m = int.Parse(reader.ReadLine());
+int[] spreaders = Array.ConvertAll(reader.ReadLine().Split(), int.Parse);
+
+Queue<Node> queue = new Queue<Node>();
+
+foreach (int s in spreaders)
+{
+    Node node = graph[s];
+    queue.Enqueue(node);
+    node.Work(0);
+}
+
+int time = 0;
+Queue<Node> nextQ = new Queue<Node>();
+
+while (queue.Count > 0)
+{
+    while (queue.Count > 0)
+    {
+        Node node = queue.Dequeue();
+        node.Work(time);
+
+        foreach (Node linked in node.GetLinkedNodes())
+        {
+            if (linked.Spread())
+            {
+                nextQ.Enqueue(linked);
+            }
+        }
+    }
+
+    Queue<Node> temp = queue;
+    queue = nextQ;
+    nextQ = temp;
+    time++;
+}
+
+for (int i=1;i<=n;i++)
+{
+    writer.Write(graph[i].GetStartTime()+" ");
+}
+
+class Node
+{
+    int workingLinks = 0;
+    bool isQueued = false;
+    int startTime = -1;
+    int threshold = 0;
+
+    List<Node> linkedNodes;
+
+    public Node()
+    {
+        linkedNodes = new List<Node>();
+    }
+
+    public void Connect(Node linked)
+    {
+        linkedNodes.Add(linked);
+        threshold = (linkedNodes.Count+1)/2;
+    }
+
+    public bool Spread()
+    {
+        if (isQueued) return false;
+
+        workingLinks++;
+
+        if (workingLinks >= threshold)
+        {
+            isQueued = true;
+        }
+
+        return isQueued;
+    }
+
+    public void Work(int time)
+    {
+        if (!isQueued) isQueued = true;
+        startTime = time;
+    }
+
+    public List<Node> GetLinkedNodes()
+    {
+        return linkedNodes;
+    }
+
+    public int GetStartTime()
+    {
+        return startTime;
+    }
+}
