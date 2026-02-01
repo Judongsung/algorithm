@@ -22,38 +22,28 @@ for (int i=1;i<=n;i++)
 int m = int.Parse(reader.ReadLine());
 int[] spreaders = Array.ConvertAll(reader.ReadLine().Split(), int.Parse);
 
-Queue<Node> queue = new Queue<Node>();
+Queue<(Node node, int time)> queue = new Queue<(Node node, int time)>();
 
 foreach (int s in spreaders)
 {
     Node node = graph[s];
-    queue.Enqueue(node);
+    queue.Enqueue((node, 0));
     node.Work(0);
 }
 
-int time = 0;
-Queue<Node> nextQ = new Queue<Node>();
-
 while (queue.Count > 0)
 {
-    while (queue.Count > 0)
-    {
-        Node node = queue.Dequeue();
-        node.Work(time);
+    var cur = queue.Dequeue();
 
-        foreach (Node linked in node.GetLinkedNodes())
+    cur.node.Work(cur.time);
+
+    foreach (Node linked in cur.node.GetLinkedNodes())
+    {
+        if (linked.Spread())
         {
-            if (linked.Spread())
-            {
-                nextQ.Enqueue(linked);
-            }
+            queue.Enqueue((linked, cur.time+1));
         }
     }
-
-    Queue<Node> temp = queue;
-    queue = nextQ;
-    nextQ = temp;
-    time++;
 }
 
 for (int i=1;i<=n;i++)
