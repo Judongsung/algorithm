@@ -4,73 +4,45 @@ using var writer = new StreamWriter(Console.OpenStandardOutput());
 int n = int.Parse(reader.ReadLine());
 int m = int.Parse(reader.ReadLine());
 
-PriorityQueue<Line, int> pq = new PriorityQueue<Line, int>();
+List<(int node, int cost)>[] graph = new List<(int node, int cost)>[n+1];
+for (int i=1;i<=n;i++) graph[i] = new List<(int node, int cost)>();
 
 for (int i=0;i<m;i++)
 {
     int[] input = Array.ConvertAll(reader.ReadLine().Split(), int.Parse);
+    int p1 = input[0];
+    int p2 = input[1];
+    int cost = input[2];
 
-    if (input[0] == input[1]) continue;
-
-    Line line = new Line(input);
-
-    pq.Enqueue(line, line.cost);
+    if (p1 == p2) continue;
+    
+    graph[p1].Add((p2, cost));
+    graph[p2].Add((p1, cost));
 }
 
+PriorityQueue<int, int> pq = new PriorityQueue<int, int>();
+bool[] visited = new bool[n+1];
 int totalCost = 0;
-HashSet<int> linked = new HashSet<int>();
-linked.Add(1);
+int linkedCount = 0;
 
-for (int i=0;i<n-1;i++)
+pq.Enqueue(1, 0);
+
+while (linkedCount < n && pq.Count > 0)
 {
-    Line cur;
-    bool containsP1;
-    bool containsP2;
+    pq.TryDequeue(out int node, out int cost);
 
-    List<Line> temp = new List<Line>();
+    if (visited[node]) continue;
 
-    do
-    {
-        cur = pq.Dequeue();
-        containsP1 = linked.Contains(cur.p1);
-        containsP2 = linked.Contains(cur.p2);
-
-        if (!containsP1 && !containsP2)
-        {
-            temp.Add(cur);
-        }
-    } while (!(containsP1 ^ containsP2));
-
-    totalCost += cur.cost;
+    totalCost += cost;
+    visited[node] = true;
+    linkedCount++;
     
-    if (!containsP1) linked.Add(cur.p1);
-    else if (!containsP2) linked.Add(cur.p2);
-
-    foreach (Line line in temp)
+    foreach (var next in graph[node])
     {
-        pq.Enqueue(line, line.cost);
+        if (visited[next.node]) continue;
+
+        pq.Enqueue(next.node, next.cost);
     }
 }
 
 writer.WriteLine(totalCost);
-
-struct Line
-{
-    public Line(int p1, int p2, int cost)
-    {
-        this.p1 = p1;
-        this.p2 = p2;
-        this.cost = cost;
-    }
-
-    public Line(int[] info)
-    {
-        this.p1 = info[0];
-        this.p2 = info[1];
-        this.cost = info[2];
-    }
-
-    public int p1;
-    public int p2;
-    public int cost;
-}
