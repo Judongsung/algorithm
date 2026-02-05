@@ -16,14 +16,6 @@ for (int i=0;i<n;i++)
 
 int[,] dp = new int[n, m+1];
 
-for (int i=0;i<n;i++)
-{
-    for (int j=0;j<=m;j++)
-    {
-        dp[i, j] = MIN_NUM;
-    }
-}
-
 for (int j=1;j<=m;j++)
 {
     for (int i=0;i<n;i++)
