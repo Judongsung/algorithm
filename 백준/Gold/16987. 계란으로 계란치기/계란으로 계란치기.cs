@@ -12,31 +12,31 @@ for (int i=0;i<n;i++)
     weights[i] = int.Parse(egg[1]);
 }
 
-writer.WriteLine(find_max_broken(durabilities, weights, 0));
+writer.WriteLine(find_max_broken(0));
 
-int find_max_broken(int[] d, int[] w, int cur)
+int find_max_broken(int cur)
 {
     if (cur == n) return 0;
-    if (d[cur] <= 0) return find_max_broken(d, w, cur+1);
+    if (durabilities[cur] <= 0) return find_max_broken(cur+1);
 
     int maxBroken = 0;
 
     for (int i=0;i<n;i++)
     {
-        if (d[i] <= 0 || i == cur) continue;
+        if (durabilities[i] <= 0 || i == cur) continue;
 
-        int[] newD = (int[]) d.Clone();
-        int[] newW = (int[]) w.Clone();
+        durabilities[cur] -= weights[i];
+        durabilities[i] -= weights[cur];
 
-        newD[cur] -= newW[i];
-        newD[i] -= newW[cur];
+        int broken = find_max_broken(cur+1);
 
-        int broken = find_max_broken(newD, newW, cur+1);
-
-        if (newD[cur] <= 0) broken++;
-        if (newD[i] <= 0) broken++;
+        if (durabilities[cur] <= 0) broken++;
+        if (durabilities[i] <= 0) broken++;
 
         if (broken > maxBroken) maxBroken = broken;
+
+        durabilities[cur] += weights[i];
+        durabilities[i] += weights[cur];
     }
 
     return maxBroken;
