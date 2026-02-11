@@ -1,10 +1,8 @@
 using var reader = new StreamReader(Console.OpenStandardInput());
 using var writer = new StreamWriter(Console.OpenStandardOutput());
 
-(int dr, int dc)[] dirs = {(-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0)};
-
 int n = int.Parse(reader.ReadLine());
-int[,] board = new int[n,n];
+
 bool[] usedCol = new bool[n];
 bool[] usedDiag1 = new bool[n*2];
 bool[] usedDiag2 = new bool[n*2];
