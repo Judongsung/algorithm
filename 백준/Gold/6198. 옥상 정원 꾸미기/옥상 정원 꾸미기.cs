@@ -9,43 +9,22 @@ for (int i=0;i<n;i++)
     heights[i] = int.Parse(reader.ReadLine());
 }
 
-int maxIdx = n;
-int maxHeight = 0;
 long vision = 0;
+Stack<int> stack = new Stack<int>();
 
-for (int i=n-1;i>=0;i--)
+for (int i=0;i<n;i++)
 {
-    int cur = heights[i];
-
-    if (cur > maxHeight)
+    while (stack.Count > 0 && heights[stack.Peek()] <= heights[i])
     {
-        vision += n-1 - i;
-        maxHeight = cur;
-        maxIdx = i;
-
-        continue;
+        vision += i-1 - stack.Pop();
     }
 
-    if (cur == maxHeight)
-    {
-        vision += maxIdx-1 - i;
-        maxIdx = i;
+    stack.Push(i);
+}
 
-        continue;
-    }
-    
-    int blocked = maxIdx;
-
-    for (int j=i+1;j<maxIdx;j++)
-    {
-        if (heights[j] >= cur)
-        {
-            blocked = j;
-            break;
-        }
-    }
-    
-    vision += blocked-1 - i;
+while (stack.Count > 0)
+{
+    vision += n-1 - stack.Pop();
 }
 
 writer.WriteLine(vision);
