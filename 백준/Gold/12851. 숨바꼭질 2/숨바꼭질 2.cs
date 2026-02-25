@@ -29,6 +29,8 @@ while (queue.Count > 0)
 {
     (int pos, int time) cur = queue.Dequeue();
     int nTime = cur.time + 1;
+    
+    if (board[k, TIME] > 0 && board[k, TIME] < nTime) break;
 
     foreach (var move in moves)
     {
