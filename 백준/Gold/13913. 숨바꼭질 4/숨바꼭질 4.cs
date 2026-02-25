@@ -11,8 +11,6 @@ int k = int.Parse(input[1]);
 
 if (k <= n)
 {
-    int[] result = new int[n - k];
-
     writer.WriteLine(n - k);
     for (int i=n;i>=k;i--)
     {
@@ -44,19 +42,17 @@ while (queue.Count > 0)
 
         if (nPos == k)
         {
-            List<int> result = new List<int>();
+            Stack<int> result = new Stack<int>();
             
-            result.Add(nPos);
+            result.Push(nPos);
 
             int prev = cur.pos;
 
             while (prev != START)
             {
-                result.Add(prev);
+                result.Push(prev);
                 prev = prevPos[prev];
             }
-
-            result.Reverse();
 
             writer.WriteLine(nTime);
             writer.WriteLine(string.Join(" ", result));
