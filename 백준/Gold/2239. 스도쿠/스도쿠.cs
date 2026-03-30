@@ -60,7 +60,7 @@ bool solve(int pos)
 
     for (int i=1;i<=MAX_NUM;i++)
     {
-        if ((candidates & (1 << (i-1))) != 0)
+        if ((candidates & bit[i]) != 0)
         {
             board[r, c] = i;
 
@@ -83,13 +83,13 @@ int GetCandidates(int r, int c)
         int num = board[r, i];
         if (num != BLANK)
         {
-            candidates &= ~(1 << (num-1));
+            candidates &= ~bit[num];
         }
 
         num = board[i, c];
         if (num != BLANK)
         {
-            candidates &= ~(1 << (num-1));
+            candidates &= ~bit[num];
         }
     }
 
@@ -103,7 +103,7 @@ int GetCandidates(int r, int c)
             int num = board[rStart + i, cStart + j];
             if (num != BLANK)
             {
-                candidates &= ~(1 << (num-1));
+                candidates &= ~bit[num];
             }
         }
     }
