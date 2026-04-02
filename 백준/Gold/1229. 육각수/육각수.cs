@@ -4,7 +4,7 @@ using var writer = new StreamWriter(Console.OpenStandardOutput());
 int n = int.Parse(reader.ReadLine());
 List<int> hexs = new List<int>();
 int[] dp = new int[n+1];
-Array.Fill(dp, int.MaxValue);
+Array.Fill(dp, 6);
 dp[0] = 0;
 
 int cur = 0;
@@ -22,22 +22,15 @@ while (true)
 
 int[] hexArray = hexs.ToArray();
 
-for (int num=1;num<=n;num++)
+foreach (int hex in hexArray)
 {
-    int min = dp[num];
-    if (min == 1) continue;
-
-    for (int j=0;j<hexArray.Length;j++)
+    for (int num=hex;num<=n;num++)
     {
-        int hex = hexArray[j];
         if (hex > num) break;
 
         int next = dp[num - hex] + 1;
-        if (next < min) min = next;
-        if (min == 2) break;
+        if (next < dp[num]) dp[num] = next;
     }
-
-    dp[num] = min;
 }
 
 writer.WriteLine(dp[n]);
