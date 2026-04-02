@@ -20,17 +20,21 @@ while (true)
     i++;
 }
 
+int[] hexArray = hexs.ToArray();
+
 for (int num=1;num<=n;num++)
 {
     int min = dp[num];
+    if (min == 1) continue;
 
-    for (int j=0;j<hexs.Count;j++)
+    for (int j=0;j<hexArray.Length;j++)
     {
-        int hex = hexs[j];
+        int hex = hexArray[j];
         if (hex > num) break;
 
         int next = dp[num - hex] + 1;
         if (next < min) min = next;
+        if (min == 2) break;
     }
 
     dp[num] = min;
