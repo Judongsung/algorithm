@@ -22,12 +22,18 @@ while (true)
 
 for (int num=1;num<=n;num++)
 {
-    foreach (int hex in hexs)
+    int min = dp[num];
+
+    for (int j=0;j<hexs.Count;j++)
     {
+        int hex = hexs[j];
         if (hex > num) break;
 
-        dp[num] = Math.Min(dp[num], dp[num - hex] + 1);
+        int next = dp[num - hex] + 1;
+        if (next < min) min = next;
     }
+
+    dp[num] = min;
 }
 
 writer.WriteLine(dp[n]);
