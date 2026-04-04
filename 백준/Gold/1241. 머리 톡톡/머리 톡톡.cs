@@ -15,34 +15,20 @@ for (int i=0;i<n;i++)
     counts[num]++;
 }
 
-int[] hitCache = new int[MAX_NUM + 1];
-Array.Fill(hitCache, NOT_VISITED);
+int[] hits = new int[MAX_NUM + 1];
+
+for (int num=0;num<=MAX_NUM;num++)
+{
+    int count = counts[num];
+    if (count == 0) continue;
+
+    for (int multi=num;multi<=MAX_NUM;multi+=num)
+    {
+        hits[multi] += count;
+    }
+}
 
 for (int i=0;i<n;i++)
 {
-    int num = nums[i];
-
-    if (hitCache[num] != NOT_VISITED)
-    {
-        writer.WriteLine(hitCache[num]);
-        continue;
-    }
-
-    int hit = 0;
-    
-    for (int j=1;j*j<=num;j++)
-    {
-        if (num % j == 0)
-        {
-            hit += counts[j];
-
-            if (j * j != num)
-            {
-                hit += counts[num / j];
-            }
-        }
-    }
-
-    hitCache[num] = hit - 1;
-    writer.WriteLine(hitCache[num]);
+    writer.WriteLine(hits[nums[i]] - 1);
 }
